@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nemotron-lens"
+version = "0.1.0"
+description = "TransformerLens-style hooking, JumpReLU SAE training, loading and evaluation for NVIDIA Nemotron hybrid (Mamba-2 + Attention + MoE) models"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Yusser Al Ghussin", email = "yusser.alghussin@gmail.com" }]
+keywords = ["interpretability", "sparse-autoencoder", "sae", "nemotron", "mamba", "moe", "transformer-lens", "sae-lens"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.0",
+    "transformers>=4.57.3",
+    "safetensors>=0.4",
+    "huggingface_hub>=0.24",
+    "numpy",
+]
+
+[project.optional-dependencies]
+# Running the Nemotron model forward requires the Mamba-2 CUDA kernels.
+# These compile against torch + nvcc; on Blackwell see nemotron-sae's setup_venv.sh.
+model = ["mamba-ssm>=2.2", "causal-conv1d>=1.4"]
+# SAEBench / SAE-Lens evaluation harness (`nemotron_lens.evals`).
+eval = ["sae-lens>=6.28,<7", "transformer-lens>=2.16", "sae-bench>=0.4"]
+dev = ["pytest>=7", "ruff", "build", "twine"]
+
+[project.urls]
+Homepage = "https://github.com/Yusser96/nemotron-lens"
+Repository = "https://github.com/Yusser96/nemotron-lens"
+"SAE weights" = "https://huggingface.co/Yusser/nemotron-3-nano-30b-a3b-saes"
+"Training pipeline" = "https://github.com/Yusser96/nemotron-sae"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
